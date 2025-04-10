@@ -1,4 +1,4 @@
-from django import models
+from djongo import models
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -79,33 +79,29 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 CORS_ALLOW_ALL_ORIGINS = True  # Allow all cross-origin requests
 
 class User(models.Model):
-    _id = models.ObjectIdField()
     username = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
+    email = models.EmailField()
     password = models.CharField(max_length=100)
 
     def __str__(self):
         return self.username
 
 class Team(models.Model):
-    _id = models.ObjectIdField()
-    name = models.CharField(max_length=100, unique=True)
-    members = models.ArrayReferenceField(to=User, on_delete=models.CASCADE, blank=True)
+    name = models.CharField(max_length=100)
+    members = models.ArrayReferenceField(to=User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.name
 
 class Activity(models.Model):
-    _id = models.ObjectIdField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     activity_type = models.CharField(max_length=100)
-    duration = models.DurationField()
+    duration = models.IntegerField()  # Duration in minutes
 
     def __str__(self):
-        return f"{self.user.username} - {self.activity_type}"
+        return f"{self.activity_type} by {self.user.username}"
 
 class Leaderboard(models.Model):
-    _id = models.ObjectIdField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     score = models.IntegerField()
 
@@ -113,7 +109,6 @@ class Leaderboard(models.Model):
         return f"{self.user.username}: {self.score}"
 
 class Workout(models.Model):
-    _id = models.ObjectIdField()
     name = models.CharField(max_length=100)
     description = models.TextField()
 
