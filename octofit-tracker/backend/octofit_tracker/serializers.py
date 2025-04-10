@@ -10,22 +10,22 @@ class ObjectIdField(serializers.Field):
         return ObjectId(data)
 
 class UserSerializer(serializers.ModelSerializer):
-    _id = ObjectIdField()
+    _id = ObjectIdField(read_only=True)
 
     class Meta:
         model = User
         fields = '__all__'
 
 class TeamSerializer(serializers.ModelSerializer):
-    _id = ObjectIdField()
-    members = UserSerializer(many=True)
+    _id = ObjectIdField(read_only=True)
+    members = UserSerializer(many=True, read_only=True)
 
     class Meta:
         model = Team
         fields = '__all__'
 
 class ActivitySerializer(serializers.ModelSerializer):
-    _id = ObjectIdField()
+    _id = ObjectIdField(read_only=True)
     user = ObjectIdField()
 
     class Meta:
@@ -33,15 +33,15 @@ class ActivitySerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class LeaderboardSerializer(serializers.ModelSerializer):
-    _id = ObjectIdField()
-    user = UserSerializer()  # Expand the user object
+    _id = ObjectIdField(read_only=True)
+    user = UserSerializer(read_only=True)
 
     class Meta:
         model = Leaderboard
         fields = '__all__'
 
 class WorkoutSerializer(serializers.ModelSerializer):
-    _id = ObjectIdField()
+    _id = ObjectIdField(read_only=True)
 
     class Meta:
         model = Workout
